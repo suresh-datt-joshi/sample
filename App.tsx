@@ -78,10 +78,18 @@ const App: React.FC = () => {
     setActiveTab('dashboard');
   };
 
+  const handleSyncMeetings = () => {
+    addNotification("Syncing meetings from connected platforms...");
+    // Simulate finding new meetings
+    setTimeout(() => {
+      addNotification("Successfully synced with Gmail, Discord, and Slack.");
+    }, 1500);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'dashboard':
-        return <Dashboard meetings={meetings} />;
+        return <Dashboard meetings={meetings} onSync={handleSyncMeetings} />;
       case 'schedule':
         return <ScheduleMeeting onAddMeeting={handleAddMeeting} existingMeetings={meetings} />;
       case 'platforms':

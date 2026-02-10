@@ -5,10 +5,19 @@ import MeetingCard from './MeetingCard';
 
 interface DashboardProps {
   meetings: Meeting[];
+  onSync?: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ meetings }) => {
+const Dashboard: React.FC<DashboardProps> = ({ meetings, onSync }) => {
   const [now, setNow] = useState(new Date());
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSync = () => {
+    if (!onSync) return;
+    setIsSyncing(true);
+    onSync();
+    setTimeout(() => setIsSyncing(false), 2000);
+  };
 
   useEffect(() => {
     const timer = setInterval(() => setNow(new Date()), 1000);
@@ -54,12 +63,26 @@ const Dashboard: React.FC<DashboardProps> = ({ meetings }) => {
           <h1 className="text-2xl font-black text-slate-900 tracking-tighter">JumpIn</h1>
         </div>
         
-        <div className="flex items-center gap-2">
-          {['Google Meet', 'Zoom', 'Microsoft Teams', 'Slack', 'Discord'].map((p) => (
-            <div key={p} className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center grayscale hover:grayscale-0 transition-all cursor-help" title={p}>
-              <i className={getPlatformIcon(p as Platform)}></i>
-            </div>
-          ))}
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={handleSync}
+            disabled={isSyncing}
+            className={`flex items-center gap-2 px-4 py-2 rounded-2xl border font-black text-xs uppercase tracking-widest transition-all ${
+              isSyncing 
+              ? 'bg-slate-50 text-slate-400 border-slate-100 cursor-not-allowed' 
+              : 'bg-white text-indigo-600 border-indigo-100 hover:bg-indigo-50 hover:border-indigo-200 active:scale-95 shadow-sm'
+            }`}
+          >
+            <i className={`fas fa-sync-alt ${isSyncing ? 'animate-spin' : ''}`}></i>
+            {isSyncing ? 'Syncing...' : 'Sync Now'}
+          </button>
+          <div className="flex items-center gap-2">
+            {['Google Meet', 'Zoom', 'Microsoft Teams', 'Slack', 'Discord'].map((p) => (
+              <div key={p} className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center grayscale hover:grayscale-0 transition-all cursor-help" title={p}>
+                <i className={getPlatformIcon(p as Platform)}></i>
+              </div>
+            ))}
+          </div>
         </div>
       </header>
 
