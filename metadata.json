@@ -1,0 +1,7 @@
+{
+  "name": "JumpIn",
+  "description": "An AI-powered meeting assistant that automatically extracts schedules and links from your digital communications, providing a unified dashboard with one-click joining.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
